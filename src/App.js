@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react"
+import { useQuery } from "react-query"
+import './App.css'
 
+const fetchData = async() =>{
+  const response = await fetch("http://localhost:3000/InitialSet")
+  return response
+}
 function App() {
+    const [status, setStatus] = useState('')
+    const {isLoading, isRefetching} = useQuery('statusCheck', fetchData,{
+      refetchInterval:120000,
+      onSuccess:()=>{
+        setStatus('Success')
+      },
+      onError:()=>{
+        setStatus('Error')
+      }
+    })
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    {isLoading ||isRefetching ? (<h5>Loading...</h5>):(<h5>{status}</h5>)}
     </div>
-  );
+  )
 }
 
 export default App;

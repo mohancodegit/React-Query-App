@@ -10,6 +10,8 @@ function App() {
     const [status, setStatus] = useState('')
     const {isLoading, isRefetching} = useQuery('statusCheck', fetchData,{
       refetchInterval:120000,
+      refetchOnWindowFocus: false,
+      cacheTime:120000,
       onSuccess:()=>{
         setStatus('Success')
       },
